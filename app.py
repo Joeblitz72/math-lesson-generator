@@ -142,81 +142,82 @@ def generate_day_plan(day, standard, substandard, topic):
 st.title("📐 Weekly Math Lesson Plan Presentation Generator")
 st.write("Input your parameters below to instantly generate an entire 5-day, 55-slide aligned curriculum deck.")
 
-# --- 4. STREAMLIT USER INTERFACE ---
-st.title("📐 Weekly Math Lesson Plan Presentation Generator")
-st.write("Input your parameters below to instantly generate an entire 5-day, 55-slide aligned curriculum deck.")
-
-# Dictionary holding the standards (we can expand K-7 later)
+# Nested Dictionary for Grade -> Standard -> Substandard
+# I have built out the new 8th-grade Georgia standards completely. 
+# You can fill in the rest of K-7 using this exact formatting pattern.
 ga_standards = {
-    "Kindergarten": ["K.NR.1", "K.NR.2", "K.PAR.3", "K.MDR.4"],
-    "1st Grade": ["1.NR.1", "1.NR.2", "1.PAR.3", "1.MDR.4"],
-    "2nd Grade": ["2.NR.1", "2.NR.2", "2.PAR.3", "2.MDR.4"],
-    "3rd Grade": ["3.NR.1", "3.NR.2", "3.PAR.3", "3.MDR.4"],
-    "4th Grade": ["4.NR.1", "4.NR.2", "4.PAR.3", "4.MDR.4"],
-    "5th Grade": ["5.NR.1", "5.NR.2", "5.PAR.3", "5.MDR.4"],
-    "6th Grade": ["6.NR.1", "6.NR.2", "6.NR.3", "6.PAR.4"],
-    "7th Grade": ["7.NR.1", "7.PAR.2", "7.PAR.3", "7.PAR.4"],
-    "8th Grade": [
-        "8.NR.1: Rational and Irrational Numbers",
-        "8.NR.2: Integer Exponents and Scientific Notation",
-        "8.PAR.3: Linear Equations and Inequalities",
-        "8.PAR.4: Systems of Linear Equations",
-        "8.FGR.5: Functions",
-        "8.FGR.6: Transformations and Geometry",
-        "8.FGR.7: Pythagorean Theorem",
-        "8.DSR.8: Bivariate Data"
-    ]
+    "6th Grade": {
+        "6.NR.1: Number System": ["6.NR.1.1", "6.NR.1.2"],
+        "6.NR.2: Operations": ["6.NR.2.1", "6.NR.2.2"]
+    },
+    "7th Grade": {
+        "7.NR.1: Rational Numbers": ["7.NR.1.1", "7.NR.1.2"],
+        "7.PAR.2: Expressions": ["7.PAR.2.1", "7.PAR.2.2"]
+    },
+    "8th Grade": {
+        "8.NR.1: Rational and Irrational Numbers": [
+            "8.NR.1.1: Distinguish between rational and irrational numbers",
+            "8.NR.1.2: Approximate irrational numbers to compare size"
+        ],
+        "8.NR.2: Integer Exponents and Scientific Notation": [
+            "8.NR.2.1: Apply properties of integer exponents",
+            "8.NR.2.2: Use square and cube root symbols",
+            "8.NR.2.3: Estimate using scientific notation",
+            "8.NR.2.4: Perform operations with scientific notation"
+        ],
+        "8.PAR.3: Linear Equations and Inequalities": [
+            "8.PAR.3.1: Solve multi-step linear equations",
+            "8.PAR.3.2: Solve multi-step linear inequalities"
+        ],
+        "8.PAR.4: Systems of Linear Equations": [
+            "8.PAR.4.1: Understand solutions to systems of equations",
+            "8.PAR.4.2: Solve systems of equations algebraically"
+        ],
+        "8.FGR.5: Functions": [
+            "8.FGR.5.1: Understand a function is a rule",
+            "8.FGR.5.2: Compare properties of two functions",
+            "8.FGR.5.3: Interpret equation y = mx + b"
+        ],
+        "8.FGR.6: Transformations and Geometry": [
+            "8.FGR.6.1: Verify properties of rotations, reflections, translations",
+            "8.FGR.6.2: Understand congruence through transformations",
+            "8.FGR.6.3: Describe effects of dilations"
+        ],
+        "8.FGR.7: Pythagorean Theorem": [
+            "8.FGR.7.1: Explain a proof of the Pythagorean Theorem",
+            "8.FGR.7.2: Apply theorem to find unknown side lengths",
+            "8.FGR.7.3: Apply theorem to find distance on coordinate plane"
+        ],
+        "8.DSR.8: Bivariate Data": [
+            "8.DSR.8.1: Construct and interpret scatter plots",
+            "8.DSR.8.2: Use straight lines to model relationships",
+            "8.DSR.8.3: Construct and interpret two-way tables"
+        ]
+    }
 }
 
-# Create three columns for a cleaner layout
-col1, col2, col3 = st.columns(3)
+# Create four columns for a clean row of inputs
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    # Set the default index to 8 (which is 8th Grade in the list)
-    selected_grade = st.selectbox("Select Grade Level", list(ga_standards.keys()), index=8)
+    # 1. Dropdown for Grade (Defaults to 8th Grade)
+    grade_list = list(ga_standards.keys())
+    default_grade_idx = grade_list.index("8th Grade") if "8th Grade" in grade_list else 0
+    selected_grade = st.selectbox("Select Grade", grade_list, index=default_grade_idx)
 
 with col2:
-    # The standard dropdown automatically updates based on the grade selected
-    standard = st.selectbox("Select Primary Standard", ga_standards[selected_grade])
-    substandard = st.text_input("Substandard (Optional)", placeholder="e.g., 8.NR.2.2")
+    # 2. Dropdown for Main Standard (updates based on Grade)
+    standard_list = list(ga_standards[selected_grade].keys())
+    standard = st.selectbox("Select Primary Standard", standard_list)
 
 with col3:
-    topic = st.text_input("Specific Topic / Focus", placeholder="e.g., Operations with Scientific Notation")
+    # 3. Dropdown for Substandard (updates based on Main Standard)
+    substandard_list = ga_standards[selected_grade][standard]
+    substandard = st.selectbox("Select Substandard", substandard_list)
 
-# The rest of your Generate Button code remains exactly the same below this...
-with col1:
-    standard = st.text_input("Primary Standard", placeholder="e.g., NR.1 or 8.EE.1")
-    substandard = st.text_input("Substandard (Optional)", placeholder="e.g., NR.1.1 or 8.EE.1.a")
-with col2:
-    topic = st.text_input("Specific Topic / Focus", placeholder="e.g., Operations with Scientific Notation")
+with col4:
+    # 4. Text Input for Topic (with a unique key assigned in the background to prevent errors)
+    topic = st.text_input("Specific Topic", placeholder="e.g., Scientific Notation", key="unique_topic_input")
 
-if st.button("Generate Complete Widescreen Slide Deck", type="primary"):
-    if not standard or not topic:
-        st.warning("Please provide at least a primary standard and a specific topic.")
-    else:
-        weekly_plan = {}
-        
-        # Use a single progress bar to map out the days
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-        
-        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-        
-        for i, day in enumerate(days):
-            status_text.write(f"Drafting alignment and content for {day}...")
-            weekly_plan[day] = generate_day_plan(day, standard, substandard, topic)
-            progress_bar.progress((i + 1) / len(days))
-            
-        status_text.write("Compiling all 55 slides into widescreen PowerPoint format...")
-        
-        # Build the final PPTX presentation file in memory
-        pptx_data = create_presentation(weekly_plan, standard, topic)
-        
-        status_text.success("Curriculum generation complete!")
-        
-        st.download_button(
-            label="📥 Download PowerPoint Deck (.pptx)",
-            data=pptx_data,
-            file_name=f"{topic.replace(' ', '_')}_Weekly_Lesson_Plan.pptx",
-            mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
-        )
+# --- IMPORTANT: Make sure there are NO other st.text_input or st.selectbox widgets below this line! ---
+# Keep your "Generate Complete Widescreen Slide Deck" button code exactly as it is below here.
