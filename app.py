@@ -94,7 +94,7 @@ def create_presentation(weekly_data, standard, topic):
 
 # --- 3. LLM PROMPT GENERATION ENGINE ---
 def generate_day_plan(day, standard, substandard, topic):
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-1.5-pro-latest")
     
     prompt = f"""
     You are an expert curriculum writer specializing in Georgia Mathematics standards.
