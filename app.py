@@ -13,7 +13,7 @@ st.set_page_config(page_title="Weekly Math Lesson Plan Generator", page_icon="�
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 else:
-    st.error("Missing Gemini API Key! Please add 'GEMINI_API_KEY' to your Streamlit Secrets.")
+    st.error("Missing Gemini API Key! Please add 'GEMINI_API_KEY' to your Streamlit Settings > Secrets.")
 
 # --- 2. POWERPOINT GENERATOR FUNCTION ---
 def create_presentation(weekly_data, standard, topic):
@@ -22,13 +22,11 @@ def create_presentation(weekly_data, standard, topic):
     prs.slide_width = Inches(13.333)
     prs.slide_height = Inches(7.5)
     
-    # Simple, clean color palette (Dark Slate and Deep Blue accents)
     PRIMARY_COLOR = RGBColor(0x11, 0x18, 0x27)
     TEXT_COLOR = RGBColor(0x37, 0x41, 0x51)
     
     blank_slide_layout = prs.slide_layouts[6]
     
-    # Define the 11 slide types in order
     slide_types = [
         "Title", "Standard & Substandard", "Learning Target", "Opening (Warm-Up)", 
         "Work Session", "Formative Assessment", "GA Milestones Connection", 
@@ -41,7 +39,6 @@ def create_presentation(weekly_data, standard, topic):
         for slide_name in slide_types:
             slide = prs.slides.add_slide(blank_slide_layout)
             
-            # Add a clean Header zone for content slides
             if slide_name != "Title":
                 header_box = slide.shapes.add_textbox(Inches(0.75), Inches(0.4), Inches(11.83), Inches(1.0))
                 tf_header = header_box.text_frame
@@ -58,7 +55,6 @@ def create_presentation(weekly_data, standard, topic):
                 p_title.font.bold = True
                 p_title.font.color.rgb = PRIMARY_COLOR
                 
-                # Content Box
                 content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.8), Inches(11.83), Inches(5.0))
                 tf_content = content_box.text_frame
                 tf_content.word_wrap = True
@@ -76,7 +72,6 @@ def create_presentation(weekly_data, standard, topic):
                     if line.strip().startswith(('-', '*', '1.', '2.', '3.')):
                         p.level = 1
             else:
-                # Distinct Title Slide Layout
                 title_box = slide.shapes.add_textbox(Inches(1.0), Inches(2.5), Inches(11.33), Inches(3.0))
                 tf_title = title_box.text_frame
                 tf_title.word_wrap = True
@@ -127,11 +122,9 @@ def generate_day_plan(day, standard, substandard, topic):
     
     response = model.generate_content(prompt)
     try:
-        # Strip potential markdown wrapping if the model accidentally included it
         clean_text = response.text.strip().strip("```json").strip("```").strip()
         return json.loads(clean_text)
     except Exception as e:
-        # Fallback dictionary if parsing fails
         return {k: f"Error generating content: {str(e)}. Raw text: {response.text}" for k in [
             "Title", "Standard & Substandard", "Learning Target", "Opening (Warm-Up)", 
             "Work Session", "Formative Assessment", "GA Milestones Connection", 
@@ -143,8 +136,6 @@ st.title("📐 Weekly Math Lesson Plan Presentation Generator")
 st.write("Input your parameters below to instantly generate an entire 5-day, 55-slide aligned curriculum deck.")
 
 # Nested Dictionary for Grade -> Standard -> Substandard
-# I have built out the new 8th-grade Georgia standards completely. 
-# You can fill in the rest of K-7 using this exact formatting pattern.
 ga_standards = {
     "6th Grade": {
         "6.NR.1: Number System": ["6.NR.1.1", "6.NR.1.2"],
@@ -196,28 +187,54 @@ ga_standards = {
     }
 }
 
-# Create four columns for a clean row of inputs
+st.divider()
+
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    # 1. Dropdown for Grade (Defaults to 8th Grade)
     grade_list = list(ga_standards.keys())
     default_grade_idx = grade_list.index("8th Grade") if "8th Grade" in grade_list else 0
     selected_grade = st.selectbox("Select Grade", grade_list, index=default_grade_idx)
 
 with col2:
-    # 2. Dropdown for Main Standard (updates based on Grade)
     standard_list = list(ga_standards[selected_grade].keys())
     standard = st.selectbox("Select Primary Standard", standard_list)
 
 with col3:
-    # 3. Dropdown for Substandard (updates based on Main Standard)
     substandard_list = ga_standards[selected_grade][standard]
     substandard = st.selectbox("Select Substandard", substandard_list)
 
 with col4:
-    # 4. Text Input for Topic (with a unique key assigned in the background to prevent errors)
     topic = st.text_input("Specific Topic", placeholder="e.g., Scientific Notation", key="unique_topic_input")
 
-# --- IMPORTANT: Make sure there are NO other st.text_input or st.selectbox widgets below this line! ---
-# Keep your "Generate Complete Widescreen Slide Deck" button code exactly as it is below here.
+st.divider()
+
+# --- 5. SUBMISSION BUTTON & LOGIC ---
+if st.button("Generate Complete Widescreen Slide Deck", type="primary"):
+    if not standard or not topic:
+        st.warning("Please provide a specific topic to generate the lesson plan.")
+    else:
+        weekly_plan = {}
+        
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+        
+        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        
+        for i, day in enumerate(days):
+            status_text.write(f"Drafting alignment and content for {day}...")
+            weekly_plan[day] = generate_day_plan(day, standard, substandard, topic)
+            progress_bar.progress((i + 1) / len(days))
+            
+        status_text.write("Compiling all 55 slides into widescreen PowerPoint format...")
+        
+        pptx_data = create_presentation(weekly_plan, standard, topic)
+        
+        status_text.success("Curriculum generation complete!")
+        
+        st.download_button(
+            label="📥 Download PowerPoint Deck (.pptx)",
+            data=pptx_data,
+            file_name=f"{topic.replace(' ', '_')}_Weekly_Lesson_Plan.pptx",
+            mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        )
