@@ -136,57 +136,7 @@ st.title("📐 Weekly Math Lesson Plan Presentation Generator")
 st.write("Input your parameters below to instantly generate an entire 5-day, 55-slide aligned curriculum deck.")
 
 # Nested Dictionary for Grade -> Standard -> Substandard
-ga_standards = {
-    "6th Grade": {
-        "6.NR.1: Number System": ["6.NR.1.1", "6.NR.1.2"],
-        "6.NR.2: Operations": ["6.NR.2.1", "6.NR.2.2"]
-    },
-    "7th Grade": {
-        "7.NR.1: Rational Numbers": ["7.NR.1.1", "7.NR.1.2"],
-        "7.PAR.2: Expressions": ["7.PAR.2.1", "7.PAR.2.2"]
-    },
-    "8th Grade": {
-        "8.NR.1: Rational and Irrational Numbers": [
-            "8.NR.1.1: Distinguish between rational and irrational numbers",
-            "8.NR.1.2: Approximate irrational numbers to compare size"
-        ],
-        "8.NR.2: Integer Exponents and Scientific Notation": [
-            "8.NR.2.1: Apply properties of integer exponents",
-            "8.NR.2.2: Use square and cube root symbols",
-            "8.NR.2.3: Estimate using scientific notation",
-            "8.NR.2.4: Perform operations with scientific notation"
-        ],
-        "8.PAR.3: Linear Equations and Inequalities": [
-            "8.PAR.3.1: Solve multi-step linear equations",
-            "8.PAR.3.2: Solve multi-step linear inequalities"
-        ],
-        "8.PAR.4: Systems of Linear Equations": [
-            "8.PAR.4.1: Understand solutions to systems of equations",
-            "8.PAR.4.2: Solve systems of equations algebraically"
-        ],
-        "8.FGR.5: Functions": [
-            "8.FGR.5.1: Understand a function is a rule",
-            "8.FGR.5.2: Compare properties of two functions",
-            "8.FGR.5.3: Interpret equation y = mx + b"
-        ],
-        "8.FGR.6: Transformations and Geometry": [
-            "8.FGR.6.1: Verify properties of rotations, reflections, translations",
-            "8.FGR.6.2: Understand congruence through transformations",
-            "8.FGR.6.3: Describe effects of dilations"
-        ],
-        "8.FGR.7: Pythagorean Theorem": [
-            "8.FGR.7.1: Explain a proof of the Pythagorean Theorem",
-            "8.FGR.7.2: Apply theorem to find unknown side lengths",
-            "8.FGR.7.3: Apply theorem to find distance on coordinate plane"
-        ],
-        "8.DSR.8: Bivariate Data": [
-            "8.DSR.8.1: Construct and interpret scatter plots",
-            "8.DSR.8.2: Use straight lines to model relationships",
-            "8.DSR.8.3: Construct and interpret two-way tables"
-        ]
-    }
-}
-
+from standards import ga_standards
 st.divider()
 
 col1, col2, col3, col4 = st.columns(4)
