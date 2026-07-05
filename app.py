@@ -142,7 +142,48 @@ def generate_day_plan(day, standard, substandard, topic):
 st.title("📐 Weekly Math Lesson Plan Presentation Generator")
 st.write("Input your parameters below to instantly generate an entire 5-day, 55-slide aligned curriculum deck.")
 
-col1, col2 = st.columns(2)
+# --- 4. STREAMLIT USER INTERFACE ---
+st.title("📐 Weekly Math Lesson Plan Presentation Generator")
+st.write("Input your parameters below to instantly generate an entire 5-day, 55-slide aligned curriculum deck.")
+
+# Dictionary holding the standards (we can expand K-7 later)
+ga_standards = {
+    "Kindergarten": ["K.NR.1", "K.NR.2", "K.PAR.3", "K.MDR.4"],
+    "1st Grade": ["1.NR.1", "1.NR.2", "1.PAR.3", "1.MDR.4"],
+    "2nd Grade": ["2.NR.1", "2.NR.2", "2.PAR.3", "2.MDR.4"],
+    "3rd Grade": ["3.NR.1", "3.NR.2", "3.PAR.3", "3.MDR.4"],
+    "4th Grade": ["4.NR.1", "4.NR.2", "4.PAR.3", "4.MDR.4"],
+    "5th Grade": ["5.NR.1", "5.NR.2", "5.PAR.3", "5.MDR.4"],
+    "6th Grade": ["6.NR.1", "6.NR.2", "6.NR.3", "6.PAR.4"],
+    "7th Grade": ["7.NR.1", "7.PAR.2", "7.PAR.3", "7.PAR.4"],
+    "8th Grade": [
+        "8.NR.1: Rational and Irrational Numbers",
+        "8.NR.2: Integer Exponents and Scientific Notation",
+        "8.PAR.3: Linear Equations and Inequalities",
+        "8.PAR.4: Systems of Linear Equations",
+        "8.FGR.5: Functions",
+        "8.FGR.6: Transformations and Geometry",
+        "8.FGR.7: Pythagorean Theorem",
+        "8.DSR.8: Bivariate Data"
+    ]
+}
+
+# Create three columns for a cleaner layout
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    # Set the default index to 8 (which is 8th Grade in the list)
+    selected_grade = st.selectbox("Select Grade Level", list(ga_standards.keys()), index=8)
+
+with col2:
+    # The standard dropdown automatically updates based on the grade selected
+    standard = st.selectbox("Select Primary Standard", ga_standards[selected_grade])
+    substandard = st.text_input("Substandard (Optional)", placeholder="e.g., 8.NR.2.2")
+
+with col3:
+    topic = st.text_input("Specific Topic / Focus", placeholder="e.g., Operations with Scientific Notation")
+
+# The rest of your Generate Button code remains exactly the same below this...
 with col1:
     standard = st.text_input("Primary Standard", placeholder="e.g., NR.1 or 8.EE.1")
     substandard = st.text_input("Substandard (Optional)", placeholder="e.g., NR.1.1 or 8.EE.1.a")
