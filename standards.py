@@ -77,13 +77,31 @@ ga_standards = {
         "7.DSR.6: Probability": ["7.DSR.6.1", "7.DSR.6.2", "7.DSR.6.3"]
     },
     "8th Grade": {
-         "8.NR.1: Rational and Irrational Numbers": ["8.NR.1.1", "8.NR.1.2"],
-         "8.NR.2: Integer Exponents and Scientific Notation": ["8.NR.2.1", "8.NR.2.2", "8.NR.2.3", "8.NR.2.4"],
-         "8.PAR.3: Linear Equations and Inequalities": ["8.PAR.3.1", "8.PAR.3.2", "8.PAR.3.3"],
-         "8.PAR.4: Systems of Linear Equations": ["8.PAR.4.1", "8.PAR.4.2"],
-         "8.FGR.5: Functions": ["8.FGR.5.1", "8.FGR.5.2", "8.FGR.5.3"],
-         "8.FGR.6: Transformations and Geometry": ["8.FGR.6.1", "8.FGR.6.2", "8.FGR.6.3"],
-         "8.GSR.7: Pythagorean Theorem": ["8.GSR.7.1", "8.GSR.7.2", "8.GSR.7.3"],
-         "8.DSR.8: Bivariate Data": ["8.DSR.8.1", "8.DSR.8.2", "8.DSR.8.3"]
+        "8.NR.1: Rational and Irrational Numbers": [
+            "8.NR.1.1", "8.NR.1.2"
+        ],
+        "8.NR.2: Integer Exponents and Scientific Notation": [
+            "8.NR.2.1", "8.NR.2.2", "8.NR.2.3", "8.NR.2.4"
+        ],
+        "8.PAR.3: Linear Equations and Inequalities": [
+            "8.PAR.3.1", "8.PAR.3.2", "8.PAR.3.3", "8.PAR.3.4", "8.PAR.3.5", "8.PAR.3.6"
+        ],
+        "8.PAR.4: Proportional and Non-Proportional Relationships": [
+            "8.PAR.4.1", "8.PAR.4.2"
+        ],
+        "8.FGR.5: Functions": [
+            "8.FGR.5.1", "8.FGR.5.2", "8.FGR.5.3", "8.FGR.5.4", "8.FGR.5.5", 
+            "8.FGR.5.6", "8.FGR.5.7", "8.FGR.5.8", "8.FGR.5.9"
+        ],
+        "8.FGR.6: Bivariate Data and Scatter Plots": [
+            "8.FGR.6.1", "8.FGR.6.2", "8.FGR.6.3", "8.FGR.6.4"
+        ],
+        "8.FGR.7: Systems of Linear Equations": [
+            "8.FGR.7.1", "8.FGR.7.2", "8.FGR.7.3", "8.FGR.7.4", "8.FGR.7.5"
+        ],
+        "8.GSR.8: Pythagorean Theorem and Volume": [
+            "8.GSR.8.1", "8.GSR.8.2", "8.GSR.8.3", "8.GSR.8.4"
+        ]
+    }
     }
 }
